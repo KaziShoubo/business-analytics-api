@@ -1,3 +1,6 @@
+"""
+Our SQLAlchemy Sale model describes how data is stored in the database
+"""
 from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey
 from ..database.database import Base
 

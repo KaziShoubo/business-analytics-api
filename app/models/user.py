@@ -1,3 +1,7 @@
+"""
+Our SQLAlchemy User model describes how data is stored in the database
+"""
+
 from ..database.database import Base
 from sqlalchemy import Column, Integer, String
 

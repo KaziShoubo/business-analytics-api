@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-
 # Use SQLite and store the database in business_analytics.db
 DATABASE_URL = "sqlite:///./business_analytics.db"
 
@@ -17,6 +16,18 @@ SessionLocal = sessionmaker(
     autoflush=False,
     bind=engine
 )
+
+
+# Creating a database Dependency
+# It gives a database session that FastAPI can give to the endpoints
+def get_db():
+    db = SessionLocal()
+
+    try:
+        yield db  # Give the endpoint a database session, and when the request is finished, execute the cleanup code.
+    finally:
+        db.close()
+
 
 Base = declarative_base()
 
