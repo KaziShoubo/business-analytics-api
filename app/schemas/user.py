@@ -5,7 +5,12 @@ from pydantic import BaseModel
 class UserCreate(BaseModel):
     username: str
     password: str
-    role: str
+    # role: str     # I don't want a public registration request deciding its own privileges, let server decide this
+
+
+class AdminUserCreate(BaseModel):
+    username: str
+    password: str
 
 
 # Data when going out of the API
