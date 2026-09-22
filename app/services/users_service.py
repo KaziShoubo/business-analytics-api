@@ -3,6 +3,9 @@ from ..models.user import User
 from ..schemas.user import UserCreate, AdminUserCreate
 from pwdlib import PasswordHash
 from sqlalchemy import select
+import logging
+
+logger = logging.getLogger(__name__)
 
 password_hash = PasswordHash.recommended()
 
@@ -22,6 +25,7 @@ def create_user(user_data: UserCreate, db: Session):
     db.commit()
     db.refresh(user)
 
+    logger.info(f"User Created Successfully: {user.username}")
     return user
 
 

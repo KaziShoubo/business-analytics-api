@@ -232,8 +232,46 @@ The project utilizes **SQLite** coupled with **SQLAlchemy**.
 
 ---
 
+# 🧪 FastAPI Application Test Suite
+
+This repository contains the automated test suite designed to validate the core functionality of the FastAPI application. The suite covers **16 distinct test cases** distributed across 5 major functional modules, ensuring robust security, isolation, and accurate analytics.
+
+## Test Suite Architecture
+
+The test suite is structured hierarchically as follows:
+
+```text
+16 TESTS
+   │
+   ├── Authentication
+   │     ├── Registration
+   │     ├── Login
+   │     └── Invalid password
+   │
+   ├── Authorization
+   │     ├── JWT required
+   │     ├── User vs Admin
+   │     └── Admin access
+   │
+   ├── Sales CRUD
+   │     ├── Create
+   │     ├── Read
+   │     ├── Update
+   │     └── Delete
+   │
+   ├── User Isolation
+   │     └── Users cannot access others' sales
+   │
+   └── Analytics
+         ├── Revenue
+         ├── Products
+         ├── Categories
+         └── Summary
+```
+
+---
+
 ## 🚀 Future Improvements
-* [ ] Full automated unit and integration test coverage.
 * [ ] Pagination and filtering configurations for sales records.
 * [ ] Date-range parameter controls for custom analytics window parsing.
 * [ ] Native PostgreSQL engine configuration switch support.

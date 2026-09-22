@@ -4,8 +4,11 @@ from sqlalchemy.orm import Session
 from ..models.user import User
 from fastapi import HTTPException
 import jwt
+import logging
 from ..config import SECRET_KEY, ALGORITHM
 from datetime import datetime, timedelta, timezone
+
+logger = logging.getLogger(__name__)
 
 password_hash = PasswordHash.recommended()
 
@@ -29,18 +32,24 @@ def get_user_by_name(username, db: Session):
 def authenticate_user(username, password, db: Session):
     user = get_user_by_name(username, db)
     if user is None:
+        logger.warning(f"Failed login with user: {username}")
         raise HTTPException(
             status_code=401,
             detail="Incorrect username or password"
         )
+
 
     check_password = verify_password(password, user.password_hash)
 
     if not check_password:
+        logger.warning(f"Failed login with user: {username}")
         raise HTTPException(
             status_code=401,
             detail="Incorrect username or password"
         )
+
+
+    logger.info(f"User logged in successfully: {username}")
 
     return user
 

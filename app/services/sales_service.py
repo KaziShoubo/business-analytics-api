@@ -3,6 +3,9 @@ from ..models.sale import Sale
 from ..schemas.sale import SaleCreate
 from sqlalchemy import select
 from ..models.user import User
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def create_sale(sale: SaleCreate, current_user: User, db: Session):
@@ -16,8 +19,20 @@ def create_sale(sale: SaleCreate, current_user: User, db: Session):
     )
 
     db.add(new_sale)
-    db.commit()
+    # Log unexpected database errors and re-raise them.
+    try:
+        db.commit()
+    except Exception:
+        logger.exception("failed to create sale") # log both message and traceback
+        raise
+
     db.refresh(new_sale)
+
+    logger.info(
+        f"Sale created: {new_sale.product_name}|"
+        f"Sale ID: {new_sale.id}|"
+        f"User: {current_user.username}|"
+    )
 
     return new_sale
 
@@ -59,6 +74,12 @@ def update_sale(sale_id: int, sale_data: SaleCreate, current_user: User, db: Ses
     db.commit()
     db.refresh(sale)
 
+    logger.info(
+        f"Sale updated: {sale.product_name} | "
+        f"Sale ID: {sale.id} | "
+        f"User: {current_user.username}"
+    )
+
     return sale
 
 
@@ -72,5 +93,11 @@ def delete_sale(sale_id: int, current_user: User, db: Session):
 
     db.delete(sale)
     db.commit()
+
+    logger.info(
+        f"Sale deleted: {sale.product_name} | "
+        f"Sale ID: {sale.id} | "
+        f"User: {current_user.username}"
+    )
 
     return {"message": "Sale deleted successfully"}

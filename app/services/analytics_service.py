@@ -2,6 +2,9 @@ from sqlalchemy.orm import Session
 from ..models.user import User
 from ..models.sale import Sale
 from sqlalchemy import select, func
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 # return total revenue per user. revenue = quantity*unit_price
@@ -15,6 +18,9 @@ def get_revenue(current_user: User, db: Session):
         total = i.quantity * i.unit_price
         sales_revenue += total
 
+    logger.info(
+        f"Revenue analytics requested | User: {current_user.username}"
+    )
     return {"total_revenue": sales_revenue}
 
 
@@ -46,6 +52,10 @@ def get_products(current_user: User, db: Session):
 
         products.append(row_dict)
 
+    logger.info(
+        f"Products analytics requested | User: {current_user.username}"
+    )
+
     return products
 
 
@@ -73,6 +83,10 @@ def get_categories(current_user: User, db: Session):
 
         categories.append(row_dict)
 
+    logger.info(
+        f"Categories analytics requested | User: {current_user.username}"
+    )
+
     return categories
 
 
@@ -93,6 +107,10 @@ def get_summary(current_user: User, db: Session):
         average_order_value = total_revenue / total_orders
     else:
         average_order_value = 0
+
+    logger.info(
+        f"Summary analytics requested | User: {current_user.username}"
+    )
 
     return {
         "total_revenue": total_revenue,
